@@ -40,7 +40,7 @@ body {
   cursor: none;
 }
 
-/* ========== PRELOADER ========== */
+/* ========== PROFESSIONAL PRELOADER ========== */
 .preloader {
   position: fixed;
   inset: 0;
@@ -50,7 +50,8 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.6s ease, visibility 0.6s ease;
+  transition: opacity 0.8s cubic-bezier(0.65, 0, 0.35, 1), visibility 0.8s ease;
+  overflow: hidden;
 }
 
 .preloader.loaded {
@@ -59,85 +60,149 @@ body {
   pointer-events: none;
 }
 
-.preloader-content {
+.preloader-inner {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 30px;
 }
 
-.preloader-logo {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  animation: preloaderPulse 1.5s ease-in-out infinite;
+/* Circular Progress Container */
+.progress-container {
   position: relative;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.preloader-ring {
+.progress-svg {
   position: absolute;
-  width: 100px;
-  height: 100px;
-  border: 3px solid transparent;
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: preloaderSpin 1s linear infinite;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
 }
 
-.preloader-ring-inner {
-  position: absolute;
-  width: 90px;
-  height: 90px;
-  border: 2px solid transparent;
-  border-bottom-color: var(--glow-cyan);
-  border-radius: 50%;
-  animation: preloaderSpinReverse 1.5s linear infinite;
+.progress-bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.05);
+  stroke-width: 2;
 }
 
-@keyframes preloaderPulse {
-  0%, 100% { transform: scale(1); filter: brightness(1); }
-  50% { transform: scale(1.05); filter: brightness(1.2); }
+.progress-ring {
+  fill: none;
+  stroke: url(#gradient);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 283;
+  stroke-dashoffset: 283;
+  transition: stroke-dashoffset 0.1s ease-out;
+  filter: drop-shadow(0 0 8px var(--glow-pink));
 }
 
-@keyframes preloaderSpin {
-  to { transform: rotate(360deg); }
+/* Central Content */
+.progress-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
 }
 
-@keyframes preloaderSpinReverse {
-  to { transform: rotate(-360deg); }
-}
-
-.preloader-text {
+.progress-percent {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 32px;
+  font-weight: 700;
   color: var(--fg);
-  letter-spacing: 3px;
-  text-transform: uppercase;
+  letter-spacing: -1px;
 }
 
-.preloader-bar {
-  width: 200px;
-  height: 3px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 3px;
+.progress-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--accent);
+  opacity: 0.8;
+}
+
+/* Glitch Text Container */
+.glitch-text-container {
+  text-align: center;
+  height: 40px;
   overflow: hidden;
 }
 
-.preloader-progress {
-  height: 100%;
-  background: linear-gradient(90deg, var(--accent), var(--glow-cyan));
-  border-radius: 3px;
-  width: 0%;
-  transition: width 0.3s ease;
+.preloader-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--fg);
+  position: relative;
 }
 
-.preloader-percent {
-  font-size: 13px;
-  color: var(--muted);
-  font-weight: 500;
-  letter-spacing: 1px;
+/* Scramble Text Animation */
+.char {
+  display: inline-block;
+  animation: charPop 0.4s ease forwards;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+@keyframes charPop {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading Bar (Minimal) */
+.minimal-bar {
+  width: 100px;
+  height: 2px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.minimal-bar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--glow-cyan));
+  border-radius: 2px;
+  transition: width 0.2s ease;
+}
+
+/* Exit Animation for Preloader */
+.preloader.loaded .progress-container {
+  animation: exitPulse 0.6s ease-out forwards;
+}
+
+@keyframes exitPulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+  100% { transform: scale(0.8); opacity: 0; }
+}
+
+.preloader.loaded .preloader-title {
+  animation: fadeDown 0.5s ease-out forwards;
+}
+
+@keyframes fadeDown {
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
 }
 
 /* Custom Cursor */
@@ -669,7 +734,7 @@ body {
   z-index: 1;
 }
 
-/* Analytics Widget - Updated for single card */
+/* Analytics Widget */
 .analytics-widget {
   position: fixed;
   bottom: 24px;
@@ -1144,13 +1209,18 @@ body {
   }
   
   /* Mobile preloader adjustments */
-  .preloader-text {
-    font-size: 14px;
-    letter-spacing: 2px;
+  .progress-container {
+    width: 120px;
+    height: 120px;
   }
   
-  .preloader-bar {
-    width: 160px;
+  .progress-percent {
+    font-size: 28px;
+  }
+  
+  .preloader-title {
+    font-size: 20px;
+    letter-spacing: 3px;
   }
 }
 
@@ -1220,19 +1290,40 @@ body {
 </head>
 <body>
 
-<!-- Preloader -->
+<!-- Professional Preloader -->
 <div class="preloader" id="preloader">
-  <div class="preloader-content">
-    <div style="position: relative; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center;">
-      <div class="preloader-ring"></div>
-      <div class="preloader-ring-inner"></div>
-      <img class="preloader-logo" src="pfp2.jpg" alt="Loading">
+  <div class="preloader-inner">
+    <div class="progress-container">
+      <!-- SVG Gradient Definition -->
+      <svg width="0" height="0">
+        <defs>
+          <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#ff3eb5" />
+            <stop offset="100%" stop-color="#00e5ff" />
+          </linearGradient>
+        </defs>
+      </svg>
+      
+      <!-- Progress Circle -->
+      <svg class="progress-svg" viewBox="0 0 100 100">
+        <circle class="progress-bg" cx="50" cy="50" r="45" />
+        <circle class="progress-ring" id="progress-circle" cx="50" cy="50" r="45" />
+      </svg>
+      
+      <!-- Center Content -->
+      <div class="progress-content">
+        <div class="progress-percent" id="progress-percent">0%</div>
+        <div class="progress-label">Loading</div>
+      </div>
     </div>
-    <div class="preloader-text">Cutiedevu</div>
-    <div class="preloader-bar">
-      <div class="preloader-progress" id="preloader-progress"></div>
+    
+    <!-- Glitch Text -->
+    <div class="glitch-text-container">
+      <div class="preloader-title" id="preloader-title"></div>
     </div>
-    <div class="preloader-percent" id="preloader-percent">0%</div>
+    
+    <!-- Minimal Bar -->
+    <div class="minimal-bar" id="minimal-bar"></div>
   </div>
 </div>
 
@@ -1362,7 +1453,7 @@ High tolerance for late nights.</p>
   </div>
 </div>
 
-<!-- Analytics Widget (Total Views Only) -->
+<!-- Analytics Widget -->
 <div class="analytics-widget">
   <div class="analytics-card">
     <div class="analytics-icon">
@@ -1382,8 +1473,10 @@ High tolerance for late nights.</p>
 // ========== INITIALIZATION GUARD ==========
 // All variables initialized at the top before any functions
 const preloader = document.getElementById('preloader');
-const preloaderProgress = document.getElementById('preloader-progress');
-const preloaderPercent = document.getElementById('preloader-percent');
+const progressCircle = document.getElementById('progress-circle');
+const progressPercent = document.getElementById('progress-percent');
+const preloaderTitle = document.getElementById('preloader-title');
+const minimalBar = document.getElementById('minimal-bar');
 const cursor = document.getElementById('cursor');
 const cursorDot = document.getElementById('cursor-dot');
 const mouseGlow = document.getElementById('mouse-glow');
@@ -1405,25 +1498,68 @@ const particleCount = 60;
 let isSoundOn = false;
 let preloaderLoaded = false;
 
-// ========== PRELOADER ==========
+// Circle circumference for SVG progress
+const radius = 45;
+const circumference = 2 * Math.PI * radius;
+
+// ========== PRELOADER SYSTEM ==========
 function initPreloader() {
+  // Set initial circle styles
+  progressCircle.style.strokeDasharray = circumference;
+  progressCircle.style.strokeDashoffset = circumference;
+  
+  const targetText = "CUTIEDEVU";
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$#@%&*";
+  const duration = 2000; // Total animation time
+  const frameRate = 30;
+  const totalFrames = Math.round(duration / (1000 / frameRate));
+  
+  let frame = 0;
   let progress = 0;
-  const interval = setInterval(() => {
-    progress += Math.random() * 15 + 5;
-    if (progress > 100) progress = 100;
+  
+  // Scramble Text Animation
+  const scrambleInterval = setInterval(() => {
+    frame++;
+    // Calculate progress
+    progress = Math.min(100, (frame / totalFrames) * 100 * 1.5); // Speed up slightly
     
-    preloaderProgress.style.width = progress + '%';
-    preloaderPercent.textContent = Math.floor(progress) + '%';
+    // Update circular progress
+    const offset = circumference - (progress / 100) * circumference;
+    progressCircle.style.strokeDashoffset = offset;
     
+    // Update percent text
+    progressPercent.textContent = Math.floor(progress) + '%';
+    
+    // Update minimal bar
+    minimalBar.style.width = progress + '%';
+    
+    // Update scramble text
+    let currentText = "";
+    for (let i = 0; i < targetText.length; i++) {
+      // If progress covers this character, reveal it
+      if (i < (progress / 100) * targetText.length) {
+        currentText += targetText[i];
+      } else {
+        // Otherwise show random char
+        currentText += chars[Math.floor(Math.random() * chars.length)];
+      }
+    }
+    preloaderTitle.textContent = currentText;
+    
+    // Completion
     if (progress >= 100) {
-      clearInterval(interval);
+      clearInterval(scrambleInterval);
+      preloaderTitle.textContent = targetText;
+      progressPercent.textContent = "100%";
+      
+      // Trigger exit animation
       setTimeout(() => {
         preloader.classList.add('loaded');
         preloaderLoaded = true;
         document.body.style.overflow = 'auto';
-      }, 400);
+      }, 500);
     }
-  }, 100);
+  }, 1000 / frameRate);
 }
 
 // ========== ANALYTICS SYSTEM ==========
@@ -1450,7 +1586,9 @@ function initAnalytics() {
   localStorage.setItem(ANALYTICS_KEY, JSON.stringify(analytics));
   
   // Update UI with animation
-  animateCounter('total-views', analytics.totalViews);
+  setTimeout(() => {
+    animateCounter('total-views', analytics.totalViews);
+  }, 2500);
 }
 
 function animateCounter(elementId, targetValue) {
@@ -1899,7 +2037,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setInterval(updateClock, 1000);
   
   // Start typing effect
-  setTimeout(typeText, 1500);
+  setTimeout(typeText, 2500);
   
   // Fetch Discord status
   fetchDiscordStatus();

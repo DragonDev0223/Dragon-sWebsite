@@ -158,6 +158,9 @@ a, button, .hero-card, .stat-card, .tech-card, .project-card-large, .server-card
   content: ''; position: absolute; inset: 0;
   background: radial-gradient(circle at 50% 0%, rgba(255,62,181,0.05), transparent 70%);
   opacity: 0; transition: opacity 0.5s ease;
+  /* FIX: Allows clicks to pass through the overlay */
+  pointer-events: none; 
+  z-index: 0;
 }
 .hero-card:hover::before { opacity: 1; }
 
@@ -171,6 +174,7 @@ a, button, .hero-card, .stat-card, .tech-card, .project-card-large, .server-card
 
 .avatar-wrapper {
   position: relative; width: 120px; height: 120px; margin: 0 auto 24px;
+  z-index: 1;
 }
 
 .avatar-ring {
@@ -226,6 +230,7 @@ a, button, .hero-card, .stat-card, .tech-card, .project-card-large, .server-card
   border: none; border-radius: 16px; color: white; font-weight: 600;
   font-size: 14px; cursor: none; text-decoration: none;
   transition: transform 0.2s ease, box-shadow 0.3s ease;
+  position: relative; z-index: 1;
 }
 .btn-primary:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 10px 30px rgba(255,62,181,0.3); }
 
@@ -235,8 +240,44 @@ a, button, .hero-card, .stat-card, .tech-card, .project-card-large, .server-card
   color: var(--fg); font-weight: 600; font-size: 14px;
   cursor: none; text-decoration: none;
   transition: background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+  position: relative; z-index: 1;
 }
 .btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: var(--accent); transform: translateY(-2px); }
+
+/* Social Links in Profile Card */
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px 0;
+  position: relative; 
+  z-index: 2; /* Ensures it sits above overlays */
+}
+
+.social-link {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.social-link:hover {
+  transform: translateY(-3px) scale(1.05);
+  background: rgba(255,255,255,0.05);
+  border-color: transparent;
+}
+
+.social-link.instagram:hover { color: #E4405F; box-shadow: 0 5px 15px rgba(228, 64, 95, 0.3); }
+.social-link.youtube:hover { color: #FF0000; box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3); }
+.social-link.spotify:hover { color: #1DB954; box-shadow: 0 5px 15px rgba(29, 185, 84, 0.3); }
 
 /* Discord Presence Card */
 .presence-content {
@@ -417,9 +458,23 @@ a, button, .hero-card, .stat-card, .tech-card, .project-card-large, .server-card
         <div style="text-align: center;">
           <h1 style="font-family: 'Space Grotesk'; font-size: 28px; margin-bottom: 8px;">Cutiedevu</h1>
           <div class="typing-text" id="typing-text" style="color: var(--accent); height: 20px;"></div>
+          
+          <!-- SOCIAL LINKS ADDED HERE -->
+          <div class="social-links">
+            <a href="https://www.instagram.com/koolutai/" target="_blank" class="social-link instagram" title="Instagram">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://www.youtube.com/@cutiedevu" target="_blank" class="social-link youtube" title="YouTube">
+              <i class="fab fa-youtube"></i>
+            </a>
+            <a href="https://open.spotify.com/user/31273soev5mseybrbztphajmb5su?si=cf5ab591d15045fb" target="_blank" class="social-link spotify" title="Spotify">
+              <i class="fab fa-spotify"></i>
+            </a>
+          </div>
+          
         </div>
         
-        <div style="margin-top: 30px; display: flex; justify-content: center; gap: 12px;">
+        <div style="margin-top: 10px; display: flex; justify-content: center; gap: 12px;">
            <a href="https://discord.com/invite/2CVQcpPVej" target="_blank" class="btn-primary" style="padding: 10px 20px; font-size: 12px;">Join Server</a>
            <a href="https://github.com/Cutiedevu" target="_blank" class="btn-secondary" style="padding: 10px 20px; font-size: 12px;">View GitHub</a>
         </div>
@@ -531,15 +586,26 @@ a, button, .hero-card, .stat-card, .tech-card, .project-card-large, .server-card
           <p>Tech support & development.</p>
         </div>
       </a>
-      <!-- COCONAAD SERVER WITH COCONUT ICON -->
+      <!-- COCONAAD SERVER WITH 3D COCONUT ICON -->
       <a href="https://discord.gg/pavis-gaming-893516392509354035" target="_blank" class="server-card">
         <div class="server-icon">
-           <!-- White Coconut SVG Icon -->
-           <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="display:block;">
-             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-             <circle cx="9" cy="10" r="1.5"/>
-             <circle cx="15" cy="10" r="1.5"/>
-             <circle cx="12" cy="14" r="1.5"/>
+           <!-- 3D Coconut SVG Icon -->
+           <svg width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+             <defs>
+                <radialGradient id="coconutBody" cx="35%" cy="35%" r="60%" fx="20%" fy="20%">
+                   <stop offset="0%" stop-color="#A1887F" />
+                   <stop offset="40%" stop-color="#795548" />
+                   <stop offset="100%" stop-color="#3E2723" />
+                </radialGradient>
+                <radialGradient id="holeShade" cx="40%" cy="40%" r="50%">
+                   <stop offset="0%" stop-color="#5D4037" />
+                   <stop offset="100%" stop-color="#1B0000" />
+                </radialGradient>
+             </defs>
+             <circle cx="50" cy="50" r="45" fill="url(#coconutBody)" />
+             <circle cx="38" cy="40" r="7" fill="url(#holeShade)" />
+             <circle cx="62" cy="40" r="7" fill="url(#holeShade)" />
+             <ellipse cx="50" cy="68" rx="10" ry="8" fill="url(#holeShade)" />
            </svg>
         </div>
         <div class="server-info">
@@ -602,7 +668,7 @@ function animateCursor() {
 }
 animateCursor();
 
-document.querySelectorAll('a, button, .hero-card, .stat-card, .tech-card, .project-card-large, .server-card').forEach(el => {
+document.querySelectorAll('a, button, .hero-card, .stat-card, .tech-card, .project-card-large, .server-card, .social-link').forEach(el => {
   el.addEventListener('mouseenter', () => cursor && cursor.classList.add('hover'));
   el.addEventListener('mouseleave', () => cursor && cursor.classList.remove('hover'));
 });

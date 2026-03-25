@@ -158,7 +158,6 @@ a, button, .hero-card, .stat-card, .tech-card, .project-card-large, .server-card
   content: ''; position: absolute; inset: 0;
   background: radial-gradient(circle at 50% 0%, rgba(255,62,181,0.05), transparent 70%);
   opacity: 0; transition: opacity 0.5s ease;
-  /* FIX: Allows clicks to pass through the overlay */
   pointer-events: none; 
   z-index: 0;
 }
@@ -251,7 +250,7 @@ a, button, .hero-card, .stat-card, .tech-card, .project-card-large, .server-card
   gap: 12px;
   margin: 20px 0;
   position: relative; 
-  z-index: 2; /* Ensures it sits above overlays */
+  z-index: 2;
 }
 
 .social-link {
@@ -459,7 +458,7 @@ a, button, .hero-card, .stat-card, .tech-card, .project-card-large, .server-card
           <h1 style="font-family: 'Space Grotesk'; font-size: 28px; margin-bottom: 8px;">Cutiedevu</h1>
           <div class="typing-text" id="typing-text" style="color: var(--accent); height: 20px;"></div>
           
-          <!-- SOCIAL LINKS ADDED HERE -->
+          <!-- SOCIAL LINKS -->
           <div class="social-links">
             <a href="https://www.instagram.com/koolutai/" target="_blank" class="social-link instagram" title="Instagram">
               <i class="fab fa-instagram"></i>
@@ -586,10 +585,9 @@ a, button, .hero-card, .stat-card, .tech-card, .project-card-large, .server-card
           <p>Tech support & development.</p>
         </div>
       </a>
-      <!-- COCONAAD SERVER WITH 3D COCONUT ICON -->
+      <!-- COCONAAD SERVER -->
       <a href="https://discord.gg/pavis-gaming-893516392509354035" target="_blank" class="server-card">
         <div class="server-icon">
-           <!-- White Coconut SVG Icon -->
            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="display:block;">
              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
              <circle cx="9" cy="10" r="1.5"/>
@@ -602,6 +600,14 @@ a, button, .hero-card, .stat-card, .tech-card, .project-card-large, .server-card
           <p>Gaming & chill community.</p>
         </div>
       </a>
+      <!-- LUMEO SERVER ADDED HERE -->
+      <a href="https://discord.gg/lumeodc" target="_blank" class="server-card">
+        <div class="server-icon"><i class="fas fa-bolt"></i></div>
+        <div class="server-info">
+          <h3>LUMEO</h3>
+          <p>Community & Hangout.</p>
+        </div>
+      </a>
     </div>
   </section>
 
@@ -610,7 +616,7 @@ a, button, .hero-card, .stat-card, .tech-card, .project-card-large, .server-card
 <!-- Analytics Bar -->
 <div class="analytics-bar">
   <span>Cutiedevu © <span id="year"></span></span>
-  <span>Built with <i class="fas fa-heart" style="color: var(--accent);"></i> and Code</span>
+  <span>Developed by CutieDevu<i class="fas fa-heart" style="color: var(--accent);"></i></span>
 </div>
 
 <!-- Toast Container -->

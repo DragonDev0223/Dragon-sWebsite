@@ -33,7 +33,7 @@ body {
 }
 
 /* Universal Smooth Transitions */
-a, button, .hero-card, .stat-card, .tech-card, .project-card-large, .server-card, .avatar, .avatar-ring, .section, .presence-content {
+a, button, .hero-card, .stat-card, .tech-card, .project-card-large, .server-card, .avatar, .avatar-ring, .section {
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -278,16 +278,245 @@ a, button, .hero-card, .stat-card, .tech-card, .project-card-large, .server-card
 .social-link.youtube:hover { color: #FF0000; box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3); }
 .social-link.spotify:hover { color: #1DB954; box-shadow: 0 5px 15px rgba(29, 185, 84, 0.3); }
 
-/* Discord Presence Card */
-.presence-content {
-  background: rgba(0,0,0,0.2); border-radius: 16px; padding: 16px;
-  display: flex; align-items: center; gap: 16px; border-left: 4px solid #22c55e;
+/* ===== DISCORD PRESENCE (THEME MATCHING) ===== */
+.discord-wrapper {
+  /* Glassmorphism Base */
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column; /* Changed to column to better support stacking activities */
+  padding: 24px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  
+  /* Theme Transition */
+  transition: all 0.4s ease;
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
 }
-.presence-avatar { width: 60px; height: 60px; border-radius: 50%; transition: transform 0.5s ease; }
-.presence-content:hover .presence-avatar { transform: rotate(5deg) scale(1.05); }
-.presence-info h3 { font-size: 16px; margin-bottom: 4px; }
-.presence-info p { font-size: 14px; color: var(--muted); transition: color 0.3s ease; }
-.presence-status { font-size: 12px; margin-top: 6px; opacity: 0.8; }
+
+/* Hover Effect matching site theme */
+.discord-wrapper:hover {
+  border-color: rgba(255, 62, 181, 0.4);
+  box-shadow: 0 0 25px rgba(255, 62, 181, 0.15);
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.045);
+}
+
+/* Top part of the wrapper (Avatar + Name) */
+.discord-header {
+  display: flex;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  margin-bottom: 16px;
+}
+
+.discord-left {
+  position: relative;
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+
+.discord-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 3px solid rgba(255,255,255,0.1);
+  background-color: rgba(0,0,0,0.2);
+  object-fit: cover;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.discord-wrapper:hover .discord-avatar {
+  transform: scale(1.05);
+  border-color: var(--accent);
+}
+
+.discord-status-dot {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 3px solid rgba(20,20,25,0.8); /* Slightly darker bg for contrast */
+  box-shadow: 0 0 10px currentColor; /* Glow based on status color */
+}
+
+.discord-right {
+  flex-grow: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.user-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.user-name {
+  font-weight: 700;
+  font-size: 18px;
+  color: #fff;
+  font-family: 'Space Grotesk', sans-serif; /* Match site header font */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-discriminator {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.platform-icon {
+  font-size: 14px;
+  color: var(--muted);
+  margin-left: auto;
+  transition: color 0.3s ease;
+}
+.discord-wrapper:hover .platform-icon {
+  color: var(--accent-secondary);
+}
+
+/* Activity Stack Container */
+.activities-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Activity Card - Darker Glass */
+.activity-card {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 16px;
+  padding: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s ease, transform 0.2s ease;
+}
+
+.activity-card:hover {
+  border-color: rgba(255, 62, 181, 0.2);
+  transform: translateX(4px);
+}
+
+.activity-image-wrapper {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px; /* Softer rounded corners */
+  overflow: hidden;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.05);
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.activity-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.activity-card:hover .activity-img {
+  transform: scale(1.1);
+}
+
+.activity-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  flex-grow: 1;
+}
+
+.activity-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.activity-name i.spotify-icon { color: #1DB954; text-shadow: 0 0 8px rgba(29, 185, 84, 0.4); }
+
+.activity-details {
+  font-size: 12px;
+  color: #e0e0e0; /* Lighter than muted for better readability on dark card */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+.activity-state {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Spotify Specifics */
+.spotify-bar-container {
+  width: 100%;
+  height: 4px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.spotify-bar-fill {
+  height: 100%;
+  background: #1DB954;
+  width: 0%;
+  transition: width 1s linear;
+  box-shadow: 0 0 10px rgba(29, 185, 84, 0.5);
+}
+
+.activity-timestamp {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.activity-hover-img {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid rgba(0,0,0,0.6);
+  background: #2b2d31;
+  object-fit: cover;
+}
 
 /* ===== STATS SECTION ===== */
 .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
@@ -392,6 +621,13 @@ a, button, .hero-card, .stat-card, .tech-card, .project-card-large, .server-card
   .community-grid { grid-template-columns: 1fr; }
   
   .stat-value { font-size: 24px; }
+  
+  .discord-header { flex-direction: column; text-align: center; }
+  .discord-left { margin-right: 0; margin-bottom: 12px; }
+  .user-row { justify-content: center; }
+  .activity-card { flex-direction: column; text-align: left; }
+  .activity-image-wrapper { width: 100%; height: 120px; }
+  .activity-img { width: 100%; height: 100%; }
   
   /* Disable heavy transitions on mobile for performance */
   .hero-card:hover, .stat-card:hover, .project-card-large:hover { transform: none; }
@@ -509,13 +745,47 @@ a, button, .hero-card, .stat-card, .tech-card, .project-card-large, .server-card
          <div class="stat-label">Repositories</div>
        </div>
        <div class="stat-card">
-         <div class="stat-value"><i class="fas fa-circle" style="color: #22c55e; font-size: 20px;"></i></div>
-         <div class="stat-label">Online Status</div>
+         <div class="stat-value" id="discord-status-text"><i class="fas fa-spinner fa-spin"></i></div>
+         <div class="stat-label">Discord Status</div>
        </div>
        <div class="stat-card">
          <div class="stat-value" style="font-size: 20px; font-weight: 500;">Active</div>
          <div class="stat-label">Contributions (Year)</div>
        </div>
+    </div>
+  </section>
+
+  <!-- DETAILED DISCORD PRESENCE SECTION -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-icon"><i class="fab fa-discord"></i></div>
+      <h2 class="section-title">Live Presence</h2>
+    </div>
+    <!-- Container for the JS to inject -->
+    <div id="discord-presence-container" style="display: flex; justify-content: center;">
+      <div class="discord-wrapper">
+        <!-- Header: Avatar + Info -->
+        <div class="discord-header">
+          <div class="discord-left">
+            <img src="https://cdn.discordapp.com/embed/avatars/0.png" id="dp-avatar" class="discord-avatar" alt="Discord Avatar">
+            <div id="dp-status-dot" class="discord-status-dot" style="background-color: #80848e;"></div>
+          </div>
+          <div class="discord-right">
+            <div class="user-row">
+              <span class="user-name" id="dp-username">Loading...</span>
+              <span class="user-discriminator" id="dp-discriminator">#0000</span>
+              <span class="platform-icon" id="dp-platform"><i class="fas fa-desktop"></i></span>
+            </div>
+            <div style="font-size:12px; color:var(--muted);" id="dp-custom-status"></div>
+          </div>
+        </div>
+        
+        <!-- Stacked Activities Container -->
+        <div class="activities-stack" id="dp-activities-stack">
+          <!-- Activities injected here -->
+          <div style="text-align:center; padding:10px; color:var(--muted); font-size:13px;">Checking status...</div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -532,22 +802,6 @@ a, button, .hero-card, .stat-card, .tech-card, .project-card-large, .server-card
       <div class="tech-card"><i class="fab fa-python tech-icon" style="color: #3572A5;"></i><span class="tech-name">Python</span></div>
       <div class="tech-card"><i class="fab fa-git-alt tech-icon" style="color: #f05032;"></i><span class="tech-name">Git</span></div>
       <div class="tech-card"><i class="fab fa-figma tech-icon" style="color: #F24E1E;"></i><span class="tech-name">Design</span></div>
-    </div>
-  </section>
-
-  <!-- DISCORD PRESENCE SECTION -->
-  <section class="section">
-    <div class="section-header">
-      <div class="section-icon"><i class="fab fa-discord"></i></div>
-      <h2 class="section-title">Current Status</h2>
-    </div>
-    <div class="hero-card presence-card" style="padding: 24px;">
-      <div style="display:flex; align-items:center; gap:8px; margin-bottom:20px; color:#5865F2; font-weight:600;">
-        <i class="fab fa-discord"></i> Discord Presence
-      </div>
-      <div class="presence-content" id="discord-presence">
-        <div class="presence-status">Loading status...</div>
-      </div>
     </div>
   </section>
 
@@ -663,7 +917,7 @@ function animateCursor() {
 }
 animateCursor();
 
-document.querySelectorAll('a, button, .hero-card, .stat-card, .tech-card, .project-card-large, .server-card, .social-link').forEach(el => {
+document.querySelectorAll('a, button, .hero-card, .stat-card, .tech-card, .project-card-large, .server-card, .social-link, .discord-wrapper').forEach(el => {
   el.addEventListener('mouseenter', () => cursor && cursor.classList.add('hover'));
   el.addEventListener('mouseleave', () => cursor && cursor.classList.remove('hover'));
 });
@@ -770,45 +1024,190 @@ function initAnalytics() {
 }
 initAnalytics();
 
-// ===== DISCORD STATUS =====
+// ===== ENHANCED DISCORD PRESENCE LOGIC =====
+let discordDataCache = null;
+
+// Helper to format time (MM:SS)
+function formatTime(ms) {
+  const seconds = Math.floor((ms / 1000) % 60);
+  const minutes = Math.floor((ms / (1000 * 60)) % 60);
+  const hours = Math.floor((ms / (1000 * 60 * 60)));
+  
+  if (hours > 0) {
+    return `${hours}h ${minutes}m ${seconds}s`;
+  }
+  return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+// Helper to get asset URL (FIXED FOR SPOTIFY PREFIX)
+function getAssetUrl(activity) {
+  if (!activity?.assets?.large_image) return 'https://picsum.photos/seed/music/64/64'; // Fallback
+  
+  let assetId = activity.assets.large_image;
+
+  // FIX: Check if this is Spotify
+  if (activity.type === 2) {
+    // Spotify IDs often come with "spotify:" prefix (e.g. spotify:ab67616d...)
+    // We must strip the prefix for the CDN to work.
+    if (assetId.startsWith('spotify:')) {
+      assetId = assetId.split('spotify:')[1];
+    }
+    return `https://i.scdn.co/image/${assetId}`;
+  }
+  
+  // Standard Game/Custom assets
+  if (assetId.startsWith('http')) return assetId;
+  return `https://cdn.discordapp.com/app-assets/${activity.application_id}/${assetId}.png`;
+}
+
+function renderPresence(data) {
+  const { discord_user, discord_status, activities, active_on_discord_mobile, active_on_discord_desktop, active_on_discord_web } = data;
+  
+  // 1. Update User Info
+  $('dp-username').textContent = discord_user.global_name || discord_user.username;
+  $('dp-discriminator').textContent = `#${discord_user.discriminator}`;
+  
+  const avatarUrl = discord_user.avatar 
+    ? `https://cdn.discordapp.com/avatars/${discord_user.id}/${discord_user.avatar}.png?size=128`
+    : `https://cdn.discordapp.com/embed/avatars/${parseInt(discord_user.discriminator) % 5}.png`;
+  $('dp-avatar').src = avatarUrl;
+
+  // 2. Update Status Dot
+  const statusColors = { online: '#23a559', idle: '#f0b232', dnd: '#f23f43', offline: '#80848e' };
+  $('dp-status-dot').style.backgroundColor = statusColors[discord_status] || statusColors.offline;
+  
+  // Update Status Text in Stats Card
+  const statusLabel = discord_status.charAt(0).toUpperCase() + discord_status.slice(1);
+  $('discord-status-text').innerHTML = `<span style="color:${statusColors[discord_status] || '#fff'}">● ${statusLabel}</span>`;
+
+  // 3. Platform Icon
+  let platformIcon = '';
+  if (active_on_discord_desktop) platformIcon = '<i class="fas fa-desktop"></i>';
+  else if (active_on_discord_mobile) platformIcon = '<i class="fas fa-mobile-alt"></i>';
+  else if (active_on_discord_web) platformIcon = '<i class="fab fa-chrome"></i>';
+  else platformIcon = '<i class="fas fa-power-off" style="color:#80848e"></i>';
+  $('dp-platform').innerHTML = platformIcon;
+
+  // 4. Render Multiple Activities
+  const stackContainer = $('dp-activities-stack');
+  stackContainer.innerHTML = ''; // Clear previous
+
+  if (!activities || activities.length === 0) {
+    stackContainer.innerHTML = `<div style="text-align:center; padding:10px; color:var(--muted); font-size:13px; font-style:italic;">Just chillin'...</div>`;
+    return;
+  }
+
+  // Loop through ALL relevant activities (Spotify, Games, Custom Status)
+  // We prioritize Type 0 (Game) and Type 2 (Spotify). Type 4 (Custom Status) can be noisy, usually skipped for cards.
+  const relevantActivities = activities.filter(a => a.type === 0 || a.type === 2);
+
+  if (relevantActivities.length === 0) {
+      // Fallback if only custom status exists
+      stackContainer.innerHTML = `<div style="text-align:center; padding:10px; color:var(--muted); font-size:13px; font-style:italic;">Just chillin'...</div>`;
+      return;
+  }
+
+  relevantActivities.forEach(activity => {
+    const largeImg = getAssetUrl(activity);
+    
+    // Logic for Spotify (Type 2)
+    if (activity.type === 2) { 
+      const song = escapeHtml(activity.details);
+      const artist = escapeHtml(activity.state);
+      
+      // Calculate progress
+      const start = activity.timestamps.start;
+      const end = activity.timestamps.end;
+      const now = Date.now();
+      const total = end - start;
+      const current = now - start;
+      const percent = Math.min(100, Math.max(0, (current / total) * 100));
+      
+      const cardHtml = `
+        <div class="activity-card">
+          <div class="activity-image-wrapper">
+            <img src="${largeImg}" class="activity-img" onerror="this.src='https://picsum.photos/seed/music/64/64'">
+          </div>
+          <div class="activity-info">
+            <div class="activity-name">
+              <i class="fab fa-spotify spotify-icon"></i> Spotify
+            </div>
+            <div class="activity-details" style="color:white; font-weight:500;">${song}</div>
+            <div class="activity-state">${artist}</div>
+            <div class="spotify-bar-container">
+              <div class="spotify-bar-fill" style="width: ${percent}%"></div>
+            </div>
+            <div class="activity-timestamp" id="spotify-time-${activity.application_id}">${formatTime(current)} elapsed</div>
+          </div>
+        </div>
+      `;
+      stackContainer.insertAdjacentHTML('beforeend', cardHtml);
+    } 
+    // Logic for Games/Activities (Type 0)
+    else if (activity.type === 0) {
+      const smallImg = activity.assets?.small_image 
+        ? (activity.assets.small_image.startsWith('http') 
+            ? activity.assets.small_image 
+            : `https://cdn.discordapp.com/app-assets/${activity.application_id}/${activity.assets.small_image}.png`)
+        : null;
+
+      const name = escapeHtml(activity.name);
+      const details = activity.details ? escapeHtml(activity.details) : '';
+      const state = activity.state ? escapeHtml(activity.state) : '';
+
+      // Timestamp for games
+      let timeHtml = '';
+      if (activity.timestamps.start) {
+         const elapsed = Date.now() - activity.timestamps.start;
+         timeHtml = `<div class="activity-timestamp" id="game-time-${activity.application_id}"><i class="far fa-clock"></i> ${formatTime(elapsed)} elapsed</div>`;
+      }
+
+      const cardHtml = `
+        <div class="activity-card">
+          <div class="activity-image-wrapper">
+            <img src="${largeImg}" class="activity-img" onerror="this.src='https://picsum.photos/seed/game/64/64'">
+            ${smallImg ? `<img src="${smallImg}" class="activity-hover-img">` : ''}
+          </div>
+          <div class="activity-info">
+            <div class="activity-name">Playing ${name}</div>
+            ${details ? `<div class="activity-details">${details}</div>` : ''}
+            ${state ? `<div class="activity-state">${state}</div>` : ''}
+            ${timeHtml}
+          </div>
+        </div>
+      `;
+      stackContainer.insertAdjacentHTML('beforeend', cardHtml);
+    }
+  });
+}
+
+// Function to run every second to update timers
+function updateTimers() {
+  if (!discordDataCache) return;
+  // We re-render the whole presence to update the timer bars and text efficiently
+  renderPresence(discordDataCache);
+}
+
 async function fetchDiscordStatus() {
-  const el = $('discord-presence');
   try {
     const res = await fetch('https://api.lanyard.rest/v1/users/1419682706572316682');
     const data = await res.json();
-    if (!data.success) throw new Error('Not found');
-    
-    const { discord_user, discord_status, activities, spotify } = data.data;
-    const avatar = discord_user.avatar 
-      ? `https://cdn.discordapp.com/avatars/1419682706572316682/${discord_user.avatar}.png?size=64`
-      : `https://cdn.discordapp.com/embed/avatars/0.png`;
-      
-    let activity = '';
-    if (spotify) {
-      activity = `<span style="color:#1DB954"><i class="fab fa-spotify"></i> Listening to ${escapeHtml(spotify.song)}</span>`;
-    } else if (activities.length > 0) {
-      const act = activities.find(a => a.type === 0) || activities[0];
-      activity = `Playing <strong>${escapeHtml(act.name)}</strong>`;
-    } else {
-      activity = discord_status.charAt(0).toUpperCase() + discord_status.slice(1);
+    if (data.success) {
+      discordDataCache = data.data;
+      renderPresence(discordDataCache);
     }
-    
-    const colorMap = { online: '#22c55e', idle: '#eab308', dnd: '#ef4444', offline: '#6b7280' };
-    
-    el.innerHTML = `
-      <img class="presence-avatar" src="${avatar}" alt="Avatar">
-      <div class="presence-info">
-        <h3>${escapeHtml(discord_user.global_name || discord_user.username)}</h3>
-        <p>${activity}</p>
-        <div class="presence-status" style="color:${colorMap[discord_status]}">Status: ${discord_status}</div>
-      </div>
-    `;
   } catch (e) {
-    el.innerHTML = `<div class="presence-status">Could not load status.</div>`;
+    console.error("Discord API Error:", e);
+    $('dp-username').textContent = "Offline";
+    $('dp-activities-stack').innerHTML = `<div style="text-align:center; padding:10px; color:var(--muted);">Status unavailable</div>`;
   }
 }
+
+// Fetch immediately and then every 30s
 fetchDiscordStatus();
-setInterval(fetchDiscordStatus, 30000);
+setInterval(fetchDiscordStatus, 30000); 
+setInterval(updateTimers, 1000); // Update clocks every second
+
 
 // ===== GITHUB PROJECTS =====
 async function fetchGitHubProjects() {
